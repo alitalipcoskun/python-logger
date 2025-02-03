@@ -27,3 +27,46 @@ To report suppression of an error without raising an exception, `exception, crit
 
 ## Level Configuration
 The level configuration of logger is important to parse the logs onto the console or a file. The default level is `WARNING`, thus `DEBUG and INFO` logs are not available if you do not change the configuration.
+
+## Creating logger file
+One of the best practices to store logs is naming the log file as the date and time of the runtime.
+
+It is obtained from `datetime` module.
+
+```python
+from datetime import datetime
+
+# The variable contains month, day, year, hour minute and second of the runtime as the name of the log file
+filename = f"{datetime.now().strftime('%m_%d_%Y_%H_%M_%S')}.log"
+```
+# Advanced Logging
+The library has a modularity for several categories:
+
+- *Loggers (logger class)* expose the interface that application code directly uses.
+- *Handlers* send the log records (created by loggers) to appropriate destination
+- Filters provide a finer grained facility for determining which log records to output.
+- Formatters specify the layout of log records in the final output
+
+`Note that the log event information is passed between loggers, handlers, filters and formatters in a LogRecord instance.`
+
+## Level Setting
+```python
+logger.setLevel(level)
+```
+The method sets the treshould for this logger to `level`. Logging messages which are less crucial will be ignored.
+
+## Handlers
+These objects are used for dispatching the appropriate log messages to the specified destination of the desired location which is also conducted by the handler objects.
+
+For example, the application may want to send all log messages to a log file. All logs will be stored in the log file. In addition, critical log messages will be sent to specified e-mail address. As a result, we need FileHandler and SMTPHandler for this scenario.
+
+Application code should not directly instantiate and use instances of Handler. Instead, the Handler class is a base class that defines the interface that all handlers should have and establishes some default behavior that child classes can use (or override).
+
+### StreanHandler
+If stream is specified, the instance will use it for logging output; otherwise, sys.stderr will be used.
+
+### FileHandler
+The FileHandler class, located in the core logging package, sends logging output to a disk file. It inherits the output functionality from StreamHandler.
+
+`RotatingFileHandler and TimedRotatingFileHandler` are used for helpful to maintain and analyze the log files.
+It will be discussed in future.
