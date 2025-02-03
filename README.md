@@ -28,6 +28,10 @@ For the environment that is not activated:
 conda env update --name envname--file environment.yml
 ```
 
+# Resources
+- https://signoz.io/guides/python-logging-create-log-if-not-exists-or-open-and-continue-logging-if-it-does/
+
+- https://docs.python.org/3/howto/logging.html#logging-basic-tutorial
 
 
 Feel free to reach out for improving my codes. Thanks!
