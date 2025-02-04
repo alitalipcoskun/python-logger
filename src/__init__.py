@@ -1,3 +1,4 @@
 from .logger import CustomLogger
+from .test import TestClass
 
-__all__ = ["CustomLogger"]
+__all__ = ["CustomLogger", "TestClass"]
