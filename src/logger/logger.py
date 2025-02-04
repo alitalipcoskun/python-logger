@@ -96,6 +96,7 @@ class CustomLogger(object):
             Defaults to "debug".
         """
         # TO-DO: Refactor this function
+        # Err: this function removes the features of logging. Try to avoid it in implementation, otherwise remove it.
         
         level = normalize_level(level)
         
