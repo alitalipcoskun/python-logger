@@ -1,8 +1,11 @@
 import logging
 import os
 from datetime import datetime
-from src.exceptions.log_exceptions import InvalidRelationException, InvalidNameTypeException
-from typing import Dict, Union
+from src.exceptions import InvalidRelationException, InvalidNameTypeException
+from typing import Union
+from ._utils import verify_name, normalize_level, create_log_directory
+
+
 __author__ = "alitalipcoskun"
 
 class CustomLogger(object):
@@ -24,8 +27,8 @@ class CustomLogger(object):
     ):
         
         
-        self.__verify_relation_level(level)
-        self.__name = self.__verify_name(name)
+        CustomLogger.__verify_relation_level(level)
+        self.__name = verify_name(name)
             
         # Initializing logger
         self.__logger = logging.getLogger(self.__name) # Getting the module name
@@ -50,12 +53,6 @@ class CustomLogger(object):
     ):
         return self.__logger
     
-    
-    @property
-    def date_format(
-        self
-    ):
-        return self.__date_format
     
     @classmethod
     def get_current_date(
@@ -100,7 +97,7 @@ class CustomLogger(object):
         """
         # TO-DO: Refactor this function
         
-        level = self.__normalize_level(level)
+        level = normalize_level(level)
         
         if level == "debug":
             self.logger.debug(message)
@@ -128,7 +125,7 @@ class CustomLogger(object):
             StreamHandler: to log on console
         """
         
-        level = CustomLogger.__normalize_level(level)
+        level = normalize_level(level)
         CustomLogger.__verify_relation_level(level)
         
         console_handler = logging.StreamHandler()
@@ -137,6 +134,17 @@ class CustomLogger(object):
         
         return console_handler
     
+    @staticmethod
+    def verify_relation_level(
+            level: str
+    ):
+        
+        relation_keys = list(CustomLogger.RELATIONS.keys())
+        level = normalize_level(level)
+        
+        if level not in relation_keys:
+            raise InvalidRelationException(relation=level)
+    
     @classmethod
     def __initialize_file_handler(
             cls,
@@ -144,11 +152,11 @@ class CustomLogger(object):
             level: str="debug"
     ):
         
-        level = CustomLogger.__normalize_level(level)
+        level = normalize_level(level)
         CustomLogger.__verify_relation_level(level)
         
         log_filename = os.path.join(log_directory, f"{cls.get_current_date()}.log")
-        CustomLogger.__create_log_directory(log_directory)
+        create_log_directory(log_directory)
         
         file_handler = logging.FileHandler(log_filename)
         file_handler.setLevel(CustomLogger.RELATIONS[level])
@@ -158,48 +166,14 @@ class CustomLogger(object):
     
     
     @staticmethod
-    def __verify_name(
-            name
-    ):
-        
-        if name is None:
-            return __name__
-        
-        if not isinstance(name, str) or name == "":
-            raise InvalidNameTypeException(name)
-        
-        return name
-    
-    
-    @staticmethod
     def __verify_relation_level(
             level: str
     ):
         
         relation_keys = list(CustomLogger.RELATIONS.keys())
-        level = CustomLogger.__normalize_level(level)
+        level = normalize_level(level)
         
         if level not in relation_keys:
             raise InvalidRelationException(relation=level)
     
-    
-    @staticmethod
-    def __create_log_directory(
-        log_directory: str
-    ) -> None:
-        
-        """
-        The function checks whether the entered log_directory exist or not, if it does not exist, it creates it.
-
-        Args:
-            log_directory (str): The directory that should be 
-        """
-        if not os.path.exists(log_directory):
-            os.makedirs(log_directory)
-            
-    @staticmethod
-    def __normalize_level(
-        level: str
-    ) -> str:
-        return level.lower()
     
