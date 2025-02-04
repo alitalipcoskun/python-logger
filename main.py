@@ -1,4 +1,4 @@
-from src.logger import CustomLogger
+from src.logger.logger import CustomLogger
 
 if __name__=="__main__":
     dict_test = {"test": "Bu bir deneme logudur"}
