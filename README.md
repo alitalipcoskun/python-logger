@@ -34,4 +34,4 @@ conda env update --name envname--file environment.yml
 - https://docs.python.org/3/howto/logging.html#logging-basic-tutorial
 
 
-Feel free to reach out for improving my codes. Thanks!
+Feel free to reach out for improving my code. Thanks!
